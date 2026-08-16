@@ -1,0 +1,54 @@
+{
+  "name": "@conovo/mcp",
+  "version": "0.1.0",
+  "description": "Conovo MCP server — lets a coding agent integrate Conovo: register your payload schema, mint sandbox sessions, send test contracts, and read request logs and payload gaps.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeanHules/easylegal.git",
+    "directory": "packages/mcp"
+  },
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "bin": {
+    "conovo-mcp": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm build",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx src/cli.ts"
+  },
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "access": "public"
+  },
+  "homepage": "https://www.conovo.co",
+  "keywords": [
+    "mcp",
+    "contracts",
+    "agent",
+    "conovo"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}

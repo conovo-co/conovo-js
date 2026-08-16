@@ -1,0 +1,952 @@
+/**
+ * @conovo/react styles. Everything is scoped under .conovo and themed
+ * via --cv-* variables — override them on any ancestor to match your brand.
+ */
+
+.conovo {
+  --cv-panel: #ffffff;
+  --cv-ink: #1c1c1a;
+  --cv-muted: #6f6f68;
+  --cv-line: #e6e4de;
+  --cv-accent: #2f6fed;
+  --cv-accent-soft: #e8f0ff;
+  --cv-good: #1a7f4e;
+  --cv-warn: #b45309;
+  --cv-danger: #b42318;
+  --cv-mark: #fff3bf;
+  --cv-mark-active: #ffd43b;
+  --cv-radius: 10px;
+
+  color: var(--cv-ink);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.conovo *, .conovo *::before, .conovo *::after { box-sizing: border-box; }
+
+.conovo h1 { font-size: 22px; margin: 0 0 6px; }
+.conovo .sub { color: var(--cv-muted); margin: 0 0 24px; }
+.conovo .error { color: var(--cv-danger); }
+
+.conovo .card {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 20px;
+}
+
+.conovo button.primary {
+  background: var(--cv-accent);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.conovo button.primary:disabled { opacity: 0.5; cursor: default; }
+
+/* review screen */
+.conovo .review { display: grid; grid-template-columns: 1fr 420px; gap: 20px; align-items: start; }
+/* Proportioned like a page — Letter width, generous margins — because the
+   closer this sits to the document Word shows, the less a signer-bound
+   contract surprises anyone. The typeface and base size arrive as inline
+   style from the document's own defaults; these rules are the frame. */
+.conovo .docpane {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 56px 64px;
+  max-width: 8.5in;
+  margin-inline: auto;
+  line-height: 1.45;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+.conovo .docpane p { margin: 0 0 10px; white-space: pre-wrap; }
+/* The page header sits in what Word treats as the top margin: visually part
+   of the page but clearly apart from the body. */
+.conovo .docpane .docheader { margin-bottom: 36px; }
+.conovo .docpane p.intable { padding-left: 14px; border-left: 3px solid var(--cv-line); }
+
+.conovo mark {
+  background: var(--cv-mark);
+  border-bottom: 2px solid #f0c000;
+  padding: 0 2px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+/* Traffic-light highlights, matching the card borders: green is settled,
+   yellow is an open call, red will be wrong if saved as-is. Statusless marks
+   (the send panel's live pane) keep the default yellow. */
+.conovo mark.st-good {
+  background: #e7f3ec;
+  border-bottom-color: var(--cv-good);
+}
+.conovo mark.st-check {
+  background: #fdf0c8;
+  border-bottom-color: var(--cv-warn);
+}
+.conovo mark.st-fix {
+  background: #fbeae8;
+  border-bottom-color: var(--cv-danger);
+}
+.conovo mark.active { background: var(--cv-mark-active); }
+
+.conovo .fieldspane {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Score and the fix bar ride together, so neither covers the other. */
+.conovo .panehead {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* The pane scrolls under this; without a ground, cards show through. */
+  background: var(--cv-panel);
+  padding-bottom: 10px;
+}
+
+.conovo .score {
+  background: var(--cv-accent-soft);
+  border: 1px solid #c6dbff;
+  border-radius: var(--cv-radius);
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.conovo .fieldcard {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 12px 14px;
+}
+.conovo .fieldcard.off { opacity: 0.55; }
+.conovo .fieldcard.active { border-color: var(--cv-accent); box-shadow: 0 0 0 2px var(--cv-accent-soft); }
+.conovo .fieldcard .row { display: flex; align-items: center; gap: 8px; }
+.conovo .fieldcard .label-input {
+  flex: 1;
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--cv-ink);
+}
+.conovo .fieldcard .meta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.conovo .fieldcard select, .conovo input.expr, .conovo select {
+  font-size: 12.5px;
+  border: 1px solid var(--cv-line);
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: #fff;
+  color: var(--cv-ink);
+}
+.conovo .fieldcard input.expr { flex: 1; font-family: ui-monospace, monospace; }
+.conovo .binding {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--cv-good);
+  background: #ecfdf3;
+  border-radius: 6px;
+  padding: 5px 8px;
+}
+.conovo .binding.rejected { color: var(--cv-muted); background: #f4f4f2; text-decoration: line-through; }
+.conovo .conf { font-size: 11.5px; color: var(--cv-muted); white-space: nowrap; }
+.conovo .conf .lowconf { color: var(--cv-warn); font-weight: 600; }
+.conovo .rationale { margin-top: 6px; font-size: 12.5px; color: var(--cv-muted); }
+
+.conovo .section-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--cv-muted);
+  margin: 12px 0 2px;
+}
+
+.conovo .footerbar {
+  position: sticky;
+  bottom: 0;
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* The name + save controls; messages stack above them inside the same bar. */
+.conovo .footerbar-row { display: flex; align-items: center; gap: 14px; }
+.conovo .footerbar .error,
+.conovo .footerbar .blocked { margin: 0; font-size: 13px; }
+.conovo .footerbar .blocked { color: var(--cv-muted); }
+
+.conovo .spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid var(--cv-line);
+  border-top-color: var(--cv-accent);
+  border-radius: 50%;
+  animation: conovo-spin 0.8s linear infinite;
+  vertical-align: -3px;
+  margin-right: 8px;
+}
+@keyframes conovo-spin { to { transform: rotate(360deg); } }
+
+.conovo .success {
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+  border-radius: var(--cv-radius);
+  padding: 24px;
+}
+.conovo .preview-ok { font-size: 12.5px; color: var(--cv-good); font-weight: 600; }
+.conovo .preview-err { font-size: 12px; color: var(--cv-muted); }
+.conovo .sub-inline { color: var(--cv-muted); font-weight: 400; }
+.conovo .sender-toggle { font-size: 12.5px; color: var(--cv-muted); cursor: pointer; }
+.conovo .columns { font-size: 12.5px; color: var(--cv-muted); }
+
+/* --- BulkSend ------------------------------------------------------------ */
+.conovo .bulk table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0 14px; }
+.conovo .bulk th { text-align: left; color: var(--cv-muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--cv-line); }
+.conovo .bulk td { padding: 7px 8px; border-bottom: 1px solid var(--cv-line); vertical-align: top; }
+.conovo .bulk tr:last-child td { border-bottom: none; }
+.conovo .bulk .state { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.conovo .bulk .state.ready { background: var(--cv-accent-soft); color: var(--cv-accent); }
+.conovo .bulk .state.sent { background: #e8f6ee; color: var(--cv-good); }
+.conovo .bulk .state.queued { background: #f1f2f4; color: var(--cv-muted); }
+.conovo .bulk .state.needs_attention { background: #fdf1e2; color: var(--cv-warn); }
+.conovo .bulk .state.skipped, .conovo .bulk .state.failed { background: #f1f2f4; color: var(--cv-muted); }
+.conovo .bulk .outlier { color: var(--cv-warn); font-weight: 600; }
+.conovo .bulk input[type="file"] { font-size: 13px; }
+
+/* Upload dropzone (ContractStudio step 1). The native file input is hidden;
+   the whole zone is the click target, and picking a file starts the upload
+   immediately — there is no confirm step. */
+.conovo .dropzone {
+  text-align: center;
+  padding: 44px 28px;
+  background: var(--cv-panel, #fff);
+  border: 1.5px dashed var(--cv-line);
+  border-radius: var(--cv-radius);
+  cursor: pointer;
+  transition: border-color 120ms, background 120ms;
+}
+.conovo .dropzone:hover { border-color: var(--cv-accent); }
+.conovo .dropzone.dragging {
+  border-color: var(--cv-accent);
+  background: var(--cv-accent-soft);
+}
+.conovo .dropzone.busy { cursor: default; }
+.conovo .dz-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--cv-muted);
+  margin-bottom: 10px;
+}
+.conovo .dropzone.dragging .dz-icon { color: var(--cv-accent); }
+.conovo .dz-title { font-size: 15px; font-weight: 500; margin: 0; }
+.conovo .dz-choose {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--cv-accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.conovo .dz-hint {
+  color: var(--cv-muted);
+  font-size: 12.5px;
+  margin: 10px auto 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+.conovo .dropzone .filename {
+  font-weight: 600;
+  margin: 0;
+  word-break: break-all;
+}
+
+/* Processing view: the parsed document renders immediately while the AI pass
+   runs, slightly stepped back so the banner above it reads as the live part. */
+.conovo .processing-doc {
+  max-width: 720px;
+  margin-top: 20px;
+  opacity: 0.75;
+}
+
+/* Auto-filled values in the send panel. A grid rather than a flex row: the
+   label column stays aligned down the list, and the value never collides with
+   its label the way an unstyled inline pair does. */
+.conovo .filled {
+  display: grid;
+  grid-template-columns: minmax(140px, 38%) 1fr;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 4px 0;
+}
+.conovo .filled-label { font-size: 13px; color: var(--cv-muted); }
+.conovo .filled-value { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.conovo .filled-value input { flex: 1; min-width: 0; }
+.conovo .filled .error { grid-column: 2; }
+.conovo input.expr.bad { border-color: var(--cv-danger); }
+.conovo .linkish {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 11.5px;
+  color: var(--cv-accent);
+  cursor: pointer;
+  text-decoration: underline;
+}
+@media (max-width: 560px) {
+  .conovo .filled { grid-template-columns: 1fr; }
+  .conovo .filled .error { grid-column: 1; }
+}
+.conovo .ok-check { color: var(--cv-good); font-weight: 700; }
+
+/* Standing explanation, not an error — e.g. a PDF-sourced template that can
+   be set up but never filled. */
+.conovo .notice {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--cv-line);
+  border-left: 3px solid var(--cv-warn);
+  border-radius: var(--cv-radius);
+  background: var(--cv-panel);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.conovo .chip {
+  font: inherit;
+  font-size: 12px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  padding: 3px 8px;
+  border: 1px solid var(--cv-line);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+.conovo .chip:hover { border-color: var(--cv-accent); }
+
+/* "Needs your attention" — the review pane's jump list. Sits directly under
+   the score so the first thing on screen is the work that's left, not a wall
+   of already-correct fields. */
+.conovo .attention {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-left: 3px solid var(--cv-warn);
+  border-radius: var(--cv-radius);
+  padding: 12px 14px;
+}
+.conovo .attention-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cv-warn);
+  margin-bottom: 8px;
+}
+.conovo .attention-list { list-style: none; margin: 0; padding: 0; }
+.conovo .attention-list li + li { margin-top: 2px; }
+.conovo .attention-item {
+  font: inherit;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 6px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.conovo .attention-item:hover { background: var(--cv-accent-soft); }
+.conovo .attention-label { font-weight: 600; }
+/* The consequence, not a label — it wraps under the name on narrow panes. */
+.conovo .attention-reason { color: var(--cv-muted); }
+.conovo .attention-label + .attention-reason::before { content: " — "; }
+/* A dot carries the fix/check split for anyone who can't see the color. */
+.conovo .attention-item::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 7px;
+  vertical-align: 1px;
+}
+.conovo .attention-item.fix::before { background: var(--cv-danger); }
+.conovo .attention-item.check::before { background: var(--cv-warn); }
+.conovo .attention-more {
+  font: inherit;
+  font-size: 12.5px;
+  margin-top: 6px;
+  padding: 0 6px;
+  background: none;
+  border: 0;
+  color: var(--cv-accent);
+  cursor: pointer;
+}
+
+/* ── Fix-next bar ──────────────────────────────────────────────────────────
+   A jump list you have to keep returning to is a jump list you stop using.
+   The bar stays put while the pane scrolls, so the next unresolved item is
+   always one click away from wherever the user has read to.
+   ──────────────────────────────────────────────────────────────────────── */
+.conovo .fixbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-left: 3px solid var(--cv-danger);
+  border-radius: var(--cv-radius);
+  padding: 8px 12px;
+}
+.conovo .fixbar-count { font-size: 13px; font-weight: 600; }
+.conovo .fixbar-rest { font-weight: 400; color: var(--cv-muted); }
+.conovo .fixbar button { white-space: nowrap; }
+
+/* Traffic-light borders, derived from the attention list, so they clear
+   themselves the moment the reason stops being true — never a stale border
+   to ignore. Red: saving as-is bakes in something wrong. Yellow: an open
+   call. Green: confirmed and healthy — softened toward the neutral line so a
+   screen that is mostly fine doesn't shout about it. */
+.conovo .fieldcard[data-status="fix"],
+.conovo [data-status="fix"] > .notice {
+  border-color: var(--cv-danger);
+}
+.conovo .fieldcard[data-status="check"] {
+  border-color: var(--cv-warn);
+}
+.conovo .fieldcard[data-status="good"] {
+  border-color: color-mix(in srgb, var(--cv-good) 45%, var(--cv-line));
+}
+
+/* The one just jumped to. Ring rather than a colour change, so it reads as
+   "here you are" on top of whichever severity the card already shows. */
+.conovo .fieldcard.targeted,
+.conovo .targeted > .notice {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cv-danger) 22%, transparent);
+}
+.conovo .fieldcard[data-status="check"].targeted {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cv-warn) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conovo .fieldcard { scroll-behavior: auto; }
+}
+.conovo .blanklist { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.conovo .blankrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.conovo .blankrow .chip { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* "Where does this go?" — the contract sentence around a field. */
+.conovo .whereitgoes { margin-top: 4px; }
+.conovo .filled-context { grid-column: 2; }
+.conovo .excerpt {
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  background: #f9fafb;
+  border-left: 3px solid var(--cv-line);
+  border-radius: 4px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--cv-muted);
+}
+.conovo .excerpt mark {
+  background: var(--cv-accent-soft);
+  color: var(--cv-ink);
+  font-weight: 600;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+/* Template management. */
+.conovo .tmplcard.off { opacity: 0.6; }
+.conovo .tmplhead { display: flex; align-items: center; gap: 10px; }
+.conovo .tmplhead input { flex: 1; }
+.conovo .tmplmeta { margin: 6px 0 0; font-size: 12.5px; }
+.conovo .tmplsource { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11.5px; }
+.conovo .badge-archived {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cv-muted);
+  border: 1px solid var(--cv-line);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.conovo .tmplfields {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cv-line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.conovo .tmplfield { padding-left: 10px; border-left: 2px solid var(--cv-line); }
+
+
+
+
+/* Send panel: form on the left, the live contract on the right. Falls back to
+   one column when the host doesn't give us the width — the form is the part
+   that has to work everywhere. */
+.conovo .sendlayout {
+  display: grid;
+  grid-template-columns: minmax(0, 640px);
+  gap: 20px;
+  align-items: start;
+}
+@media (min-width: 1180px) {
+  .conovo .sendlayout { grid-template-columns: minmax(0, 620px) minmax(0, 1fr); }
+}
+.conovo .sendform { max-width: 640px; margin: 0; }
+.conovo .sendpreview {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.conovo .sendpreview-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--cv-line);
+  flex-wrap: wrap;
+}
+.conovo .docpane.live {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 18px 22px;
+  font-size: 13px;
+  line-height: 1.75;
+  overflow-y: auto;
+  max-height: none;
+}
+
+/* A filled value reads as part of the contract; an unfilled one has to look
+   like the hole it is. */
+.conovo .docpane.live mark.hasvalue {
+  background: #eef6ee;
+  color: var(--cv-ink);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.conovo .docpane.live mark.novalue {
+  background: #fdf0c8;
+  color: #8a6d1f;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.conovo .docpane.live mark.active {
+  outline: 2px solid var(--cv-accent);
+  background: var(--cv-accent-soft);
+  color: var(--cv-ink);
+}
+
+/* The row the cursor is on, matched to its highlight in the contract. */
+.conovo .filled.hot,
+.conovo .pending.hot {
+  background: var(--cv-accent-soft);
+  border-radius: 6px;
+  box-shadow: 0 0 0 6px var(--cv-accent-soft);
+}
+.conovo .pending { margin-bottom: 10px; }
+
+/* Paragraph-level formatting carried over from the DOCX, so the side pane
+   reads like the document rather than a wall of identical lines. */
+/* Before the heading rules: equal specificity, so whichever comes last
+   wins, and a bold heading must read as a heading. */
+.conovo .docpane p.b { font-weight: 600; }
+.conovo .docpane p.h1,
+.conovo .docpane p.h2,
+.conovo .docpane p.h3 {
+  font-weight: 700;
+  color: var(--cv-ink);
+  margin-top: 18px;
+}
+.conovo .docpane p.h1 { font-size: 16px; letter-spacing: -0.01em; }
+.conovo .docpane p.h2 { font-size: 14.5px; }
+.conovo .docpane p.h3,
+.conovo .docpane p.h4,
+.conovo .docpane p.h5,
+.conovo .docpane p.h6 { font-size: 13px; }
+.conovo .docpane p.al-center { text-align: center; }
+.conovo .docpane p.al-right { text-align: right; }
+.conovo .docpane p.al-justify { text-align: justify; }
+.conovo .docpane p.li { padding-left: 1.1em; text-indent: -1.1em; }
+.conovo .docpane p.li::before { content: "• "; color: var(--cv-muted); }
+/* Wrapper the import screen holds a ref on; the pane inside keeps the border,
+   height cap and scrolling it always had. */
+.conovo .docpane-host { min-width: 0; }
+
+/* Contracts are largely laid out as tables — party blocks, clause grids,
+   signature blocks. Rendering their cells as stacked paragraphs is most of
+   why a preview stops looking like the document. */
+.conovo .docpane .doctable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+.conovo .docpane .doctable td {
+  border: 1px solid var(--cv-line);
+  padding: 8px 10px;
+  vertical-align: top;
+}
+/* Layout tables — party blocks, signature blocks — draw no grid. */
+.conovo .docpane .doctable.bare td { border: 0; padding: 4px 10px 4px 0; }
+/* Column widths from the document's own grid: fixed layout, so the ratios
+   hold instead of being content-size suggestions. */
+.conovo .docpane .doctable.sized { table-layout: fixed; }
+.conovo .docpane .doctable.sized td { overflow-wrap: break-word; }
+.conovo .docpane .doctable p:last-child { margin-bottom: 0; }
+
+/* ---------- revision review (re-import) ---------- */
+/* The carried group collapses, so its heading is a button. Styled as the
+   section title it sits in line with, not as a control. */
+.conovo .rev-toggle {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--cv-muted);
+  margin: 12px 0 2px;
+}
+.conovo .rev-toggle:hover { color: var(--cv-text); }
+.conovo .rev-caret { font-size: 11px; }
+.conovo .rev-hint {
+  font-size: 13px;
+  color: var(--cv-muted);
+  margin: 2px 0 8px;
+}
+.conovo .rev-prose {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.conovo .rev-prose .section-title { margin-top: 0; }
+.conovo .rev-prose ul { list-style: none; margin: 0; padding: 0; }
+.conovo .rev-change {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 6px 0;
+  border-top: 1px solid var(--cv-line);
+}
+.conovo .rev-change:first-child { border-top: 0; }
+.conovo .rev-chip {
+  flex: none;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 999px;
+  padding: 1px 7px;
+  background: var(--cv-accent-soft, rgba(0, 0, 0, 0.05));
+  color: var(--cv-accent);
+}
+.conovo .rev-sev {
+  flex: none;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cv-muted);
+}
+/* Material changes shift an obligation or an amount — worth the weight. */
+.conovo .rev-material .rev-sev { color: var(--cv-warn); font-weight: 700; }
+
+/* ---------- advisory anomaly flags ---------- */
+/* Deliberately NOT styled like .error or the validator's issue list. An issue
+   means the contract cannot go out; a flag means a model thinks it looks odd.
+   Same weight on screen would teach people to dismiss both. */
+.conovo .advisory {
+  margin-top: 12px;
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-left: 3px solid var(--cv-muted);
+  border-radius: var(--cv-radius);
+  padding: 10px 12px;
+}
+.conovo .advisory-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cv-text);
+  margin-bottom: 6px;
+}
+.conovo .advisory ul { margin: 0; padding-left: 18px; }
+.conovo .advisory li { font-size: 13px; line-height: 1.5; color: var(--cv-text); }
+.conovo .advisory-foot {
+  font-size: 12px;
+  color: var(--cv-muted);
+  margin: 8px 0 0;
+}
+
+/* Embedded signing. */
+.conovo .signframe {
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  background: var(--cv-panel);
+}
+.conovo .signframe-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--cv-line);
+  flex-wrap: wrap;
+}
+.conovo .signframe-head a.ghost { text-decoration: none; }
+/* E-records consent line pinned to the signing surface. */
+.conovo .signframe-consent {
+  margin: 0;
+  padding: 10px 16px;
+  border-top: 1px solid var(--cv-line);
+  font-size: 12px;
+}
+
+/* Recipient Q&A under the signing frame. */
+.conovo .askpanel {
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  background: var(--cv-panel);
+  margin-top: 12px;
+  padding: 12px 16px;
+}
+.conovo .askpanel summary {
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+}
+.conovo .askpanel-body { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.conovo .askpanel-answer {
+  border-left: 3px solid var(--cv-accent);
+  padding: 8px 12px;
+  background: var(--cv-panel-2, rgba(0, 0, 0, 0.03));
+  border-radius: 0 var(--cv-radius) var(--cv-radius) 0;
+}
+.conovo .askpanel-quotes {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: var(--cv-muted);
+}
+.conovo .askpanel-disclaimer { margin: 0; font-size: 12px; }
+
+/* Phone-verified signing: the identity gate shown before the signing page. */
+.conovo .verifygate {
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  background: var(--cv-panel);
+  padding: 18px 20px;
+  max-width: 460px;
+}
+
+/* Post-confirm readiness brief on the studio success screen. */
+.conovo .readiness {
+  text-align: left;
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  background: var(--cv-panel);
+  padding: 14px 16px;
+  margin: 14px 0 18px;
+}
+.conovo .readiness-headline { font-weight: 600; margin: 0 0 10px; }
+.conovo .readiness-action { margin-bottom: 10px; }
+.conovo .readiness-action:last-of-type { margin-bottom: 0; }
+
+/* --- TemplateGallery (SPEC §3.6.1) ---------------------------------------
+   The shelf reads as a quiet secondary section: an eyebrow instead of a
+   heading (the page above it already owns the hierarchy), cards that hold
+   their shape at any name length, and one meter that carries the pitch —
+   how much arrives pre-wired. */
+.conovo .gallery-head { max-width: 560px; }
+.conovo .gallery-eyebrow {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cv-muted);
+}
+.conovo .gallery-lede {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--cv-muted);
+}
+.conovo .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
+  gap: 14px;
+  margin: 18px 0 14px;
+}
+.conovo .gallery-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  transition: border-color 120ms, box-shadow 120ms;
+}
+.conovo .gallery-card:hover {
+  border-color: var(--cv-accent);
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.12);
+}
+.conovo .gallery-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.conovo .gallery-card-name {
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.conovo .gallery-chip {
+  flex-shrink: 0;
+  padding: 1px 9px;
+  border: 1px solid var(--cv-line);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--cv-muted);
+}
+.conovo .gallery-card-desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cv-muted);
+}
+/* The card's one number: an auto-fill meter, not another sentence. */
+.conovo .gallery-fill { margin-top: 2px; }
+.conovo .gallery-fill-bar {
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--cv-line);
+  overflow: hidden;
+}
+.conovo .gallery-fill-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--cv-accent);
+}
+.conovo .gallery-fill-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--cv-muted);
+}
+.conovo .gallery-adopt { align-self: flex-start; margin-top: auto; }
+.conovo .gallery-fineprint {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--cv-muted);
+}
+.conovo .gallery-done h2 { font-size: 18px; }
+
+/* --- Choice panels (upload beside starters) -------------------------------
+   Two ways to begin, presented as siblings: identical boxes, identical
+   skeleton — title, subtext, content, CTA pinned to the bottom edge. Host
+   wraps both panels in `.chooser`; the grid stretches them to equal height. */
+.conovo .chooser {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  max-width: 980px;
+}
+.conovo .panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 24px;
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+}
+.conovo .panel-title { margin: 0; font-size: 16.5px; font-weight: 650; line-height: 1.3; }
+.conovo .panel-sub {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--cv-muted);
+}
+/* The CTA row sits on the same baseline in every panel. */
+.conovo .panel-cta { align-self: flex-start; margin-top: auto; }
+/* Compact drop target inside a panel: the panel owns title and CTA, so the
+   zone is just the drag surface. It flexes to absorb the height difference,
+   keeping both panels' CTAs level. */
+.conovo .panel .dropzone.compact {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  margin: 0;
+}
+.conovo .panel .dropzone.compact .dz-icon { width: 30px; height: 30px; margin-bottom: 8px; }
+.conovo .panel .dropzone.compact .dz-title { font-size: 14px; }
+.conovo .panel .dropzone.compact .dz-hint { margin-top: 8px; max-width: 340px; }
+/* Starters inside the panel: flat rows, hairline-separated, each carrying
+   the same name/pill/meter anatomy as the standalone gallery card. */
+.conovo .panel .starter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.conovo .panel .starter + .starter {
+  border-top: 1px solid var(--cv-line);
+  padding-top: 14px;
+}
+.conovo .panel .gallery-fineprint { margin-top: 2px; }
+
+/* Deviation notice (SPEC §3.4.6) — advisory, so it sits in the warning
+   register rather than the error one: this value is allowed, it just
+   doesn't match what this business usually sends. */
+.conovo .deviation {
+  grid-column: 2;
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--cv-warn);
+}
+/* The value a binding resolves to, beside its path. */
+.conovo .binding-sample { font-weight: 600; }
