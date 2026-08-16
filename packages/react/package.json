@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JeanHules/easylegal.git",
+    "url": "git+https://github.com/conovo-co/conovo-js.git",
     "directory": "packages/react"
   },
   "type": "module",

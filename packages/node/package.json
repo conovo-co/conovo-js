@@ -1,11 +1,11 @@
 {
   "name": "@conovo/node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Conovo server SDK \u2014 session token minting and webhook signature verification. The only place your secret key belongs.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JeanHules/easylegal.git",
+    "url": "git+https://github.com/conovo-co/conovo-js.git",
     "directory": "packages/node"
   },
   "type": "module",

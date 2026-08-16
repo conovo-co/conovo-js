@@ -1,11 +1,11 @@
 {
   "name": "@conovo/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Conovo MCP server — lets a coding agent integrate Conovo: register your payload schema, mint sandbox sessions, send test contracts, and read request logs and payload gaps.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JeanHules/easylegal.git",
+    "url": "git+https://github.com/conovo-co/conovo-js.git",
     "directory": "packages/mcp"
   },
   "type": "module",

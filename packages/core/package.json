@@ -1,11 +1,11 @@
 {
   "name": "@conovo/core",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Conovo field taxonomy, expression engine, resolver, and validator \u2014 pure and deterministic",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JeanHules/easylegal.git",
+    "url": "git+https://github.com/conovo-co/conovo-js.git",
     "directory": "packages/core"
   },
   "type": "module",
