@@ -27,8 +27,18 @@ interface TemplateOption {
   reviewedSendCount: number;
   autoSendEligible: boolean;
   autoSendUnlockAt: number;
-  /** False for PDF-sourced templates — set up fine, can't be filled. */
+  /**
+   * False only when the source file can't be filled at all. PDFs generate
+   * (SPEC §3.1.1); this used to be false for them, which made a whole class
+   * of template a dead end in the UI.
+   */
   canGenerate?: boolean;
+  /**
+   * Which fill mechanism the template uses. PDF sources generate with real
+   * fidelity limits, so the panel says so up front rather than letting the
+   * user discover it in the produced document.
+   */
+  sourceFormat?: "docx" | "pdf" | null;
 }
 
 interface GroupSpec {
@@ -912,7 +922,7 @@ function SendPanel({
                 {templates.map((t) => (
                   <option key={t.versionId} value={t.versionId}>
                     {t.name}
-                    {t.canGenerate === false ? " (PDF — can't send)" : ""}
+                    {t.canGenerate === false ? " (can't be filled)" : ""}
                   </option>
                 ))}
               </select>
@@ -932,10 +942,26 @@ function SendPanel({
 
               {selectedTemplate?.canGenerate === false && (
                 <div className="notice" role="status">
-                  <strong>This template was imported from a PDF.</strong> Contracts
-                  are produced by filling the original Word file, so a PDF can be
-                  set up but not sent. Import the <code>.docx</code> version of
-                  this document and set it up once more to send it.
+                  <strong>This template&rsquo;s source file can&rsquo;t be filled.</strong>{" "}
+                  Contracts are produced from the original document, and this one
+                  isn&rsquo;t a format we can write into. Re-import it as{" "}
+                  <code>.docx</code> or <code>.pdf</code> and set it up once more.
+                </div>
+              )}
+
+              {/* PDF sources DO generate — the honest caveat is fidelity, not
+                  capability, and it belongs here rather than in the produced
+                  document. Naming the limits before the user fills the panel
+                  reads as rigor; the same limits discovered afterwards read as
+                  a bait-and-switch. */}
+              {selectedTemplate?.sourceFormat === "pdf" && (
+                <div className="notice" role="status">
+                  <strong>This template came from a PDF.</strong> It will generate,
+                  by filling the PDF&rsquo;s own form fields or drawing values over
+                  the blanks. Word sources fill more faithfully: a value much longer
+                  than the space it replaces is reported as a failed fill rather than
+                  overlapping neighbouring text, and repeating tables and
+                  sometimes-apply clauses need Word.
                 </div>
               )}
 
@@ -1164,11 +1190,12 @@ function SendPanel({
                   <div className="row" style={{ marginTop: 12, gap: 10, flexWrap: "wrap" }}>
                     <button
                       className="primary"
-                      // A PDF source can never be filled — don't let the user
-                      // complete the whole panel just to be refused by the API.
+                      // Only genuinely unfillable sources are blocked here.
+                      // Don't let the user complete the whole panel just to be
+                      // refused by the API — but a PDF is NOT that case.
                       disabled={busy || selectedTemplate?.canGenerate === false}
                       {...(selectedTemplate?.canGenerate === false
-                        ? { title: "Import the Word (.docx) version to send this one" }
+                        ? { title: "Re-import this document as .docx or .pdf to send it" }
                         : {})}
                       onClick={() => void generate()}
                     >

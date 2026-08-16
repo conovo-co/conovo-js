@@ -27,6 +27,8 @@ interface TemplateRow {
   reviewedSendCount: number;
   sourceName: string;
   canGenerate: boolean;
+  /** Fill mechanism (SPEC §3.1.1); PDFs generate with fidelity limits. */
+  sourceFormat?: "docx" | "pdf" | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,6 +39,7 @@ interface TemplateDetail {
   status: string;
   sourceName: string;
   canGenerate: boolean;
+  sourceFormat?: "docx" | "pdf" | null;
   versions: { versionId: string; version: number; createdAt: string }[];
   fields: {
     key: string;
@@ -110,7 +113,12 @@ function TemplateCard({
   }
 
   const archived = row.status === "archived";
+  // Two different states that used to be one. `canGenerate` is now true for
+  // PDFs (SPEC §3.1.1), so gating the fidelity note on !canGenerate meant it
+  // never appeared for the format it describes — while the rare genuinely
+  // unfillable source got a message telling it that it sends.
   const unfillable = !row.canGenerate;
+  const lowerFidelity = row.sourceFormat === "pdf";
 
   return (
     <div className={`card tmplcard${archived ? " off" : ""}`}>
@@ -147,6 +155,13 @@ function TemplateCard({
       </p>
 
       {unfillable && (
+        <p className="notice" style={{ marginTop: 8 }}>
+          This source file can&rsquo;t be filled. Re-import the document as .docx
+          or .pdf to send from it.
+        </p>
+      )}
+
+      {lowerFidelity && (
         <p className="notice" style={{ marginTop: 8 }}>
           Imported from a PDF. It sends, but Word files fill with higher
           fidelity — import the .docx if you have it.

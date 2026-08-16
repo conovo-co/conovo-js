@@ -1,6 +1,6 @@
 {
   "name": "@conovo/react",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "Conovo embedded components \u2014 ContractStudio, SendContract, ContractInbox, StandingTerms. Themeable via --cv-* CSS variables.",
   "license": "MIT",
   "repository": {
